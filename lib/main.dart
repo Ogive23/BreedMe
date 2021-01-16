@@ -22,6 +22,19 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(),
+      routes: <String, WidgetBuilder>{
+        "SplashScreen": (BuildContext context) => SplashScreen(),
+        "Login": (BuildContext context) => LoginScreen(),
+        "SignUp": (BuildContext context) => SignUpScreen(),
+        "ConsultationCreation": (BuildContext context) => FeedMeIntro(),
+        "PetCreation": (BuildContext context) => FeedMe(),
+        "PlaceRequest" : (BuildContext context) => MarkerCreation(),
+        "Profile": (BuildContext context) => ProfilePage(),
+//        "ReportProblem": (BuildContext context) => ReportProblemPage(),
+        "StayInTouch": (BuildContext context) => StayInTouchPage(),
+
+        //add more routes here
+      },
     );
   }
 }
@@ -74,7 +87,21 @@ class _MyHomePageState extends State<MyHomePage> {
         drawer: Drawer(child: Container()),
         floatingActionButton: _index == 0 || _index == 1 || _index == 2
             ? FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  switch(_index){
+                    case 0:
+                      Navigator.pushNamed(context, "PlaceRequest");
+                      break;
+                    case 1:
+                      Navigator.pushNamed(context, "ConsultationCreation");
+                      break;
+                    case 2:
+                      Navigator.pushNamed(context, "PetCreation");
+                      break;
+                    default:
+                      break;
+                  }
+                },
                 backgroundColor: Colors.white,
                 child: Icon(
                   pageFloatingPointIcons[_index],
