@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:intl/intl.dart';
 
-class PetsScreen extends StatelessWidget {
+class PetsScreen extends StatefulWidget {
+  @override
+  _PetsScreenState createState() => _PetsScreenState();
+}
+
+class _PetsScreenState extends State<PetsScreen> {
   List<Pet> pets = [
     Pet("1", "1", 'Leo', 1, "Male", "Dog", "", '0', true, DateTime.now()),
     Pet("2", "1", 'Diva', 2, "Female", "Dog", "Hungry", '1', true,
@@ -18,6 +23,8 @@ class PetsScreen extends StatelessWidget {
     Pet("9", "2", 'Box', 3, "Male", "Dog", "", '8', false, DateTime.now()),
     Pet("10", "2", 'Zmex', 1, "Female", "Dog", "", '9', true, DateTime.now()),
   ];
+  List<String> types = ['Dogs', 'Cats', 'Birds', 'Type1', 'Type2', 'Type3'];
+  String include = "Both";
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +32,127 @@ class PetsScreen extends StatelessWidget {
       delegate: SliverChildListDelegate(
         [
               Container(
-                width: MediaQuery.of(context).size.width/5,
-                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width/50,right: MediaQuery.of(context).size.width/50),
-                  alignment: Alignment.topRight,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Result 10 - 199'),
-                      ButtonTheme(
-                          minWidth: MediaQuery.of(context).size.width / 5,
-                          child: RaisedButton.icon(
-                            onPressed: () {},
-                            icon: Icon(AntDesign.filter),
-                            label: Text('Filter'),
-                            elevation: 0.0,
-                            color: Colors.transparent,
-
-                          )),
-                    ],
-                  ))
+                width: MediaQuery.of(context).size.width / 5,
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 50,
+                    right: MediaQuery.of(context).size.width / 50),
+                alignment: Alignment.topRight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Page 1 of 99'),
+                    RaisedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return AlertDialog(
+                                  title: Text("Filter"),
+                                  scrollable: true,
+                                  contentTextStyle: TextStyle(
+                                      height: 0.0, color: Colors.black),
+                                  content: Container(
+                                    width: 300,
+                                    height: 300,
+                                    child: Column(
+                                      // mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Include'),
+                                        DropdownButton(
+                                            items: [
+                                              DropdownMenuItem(
+                                                child: Text(
+                                                  'Available For Adoption',
+                                                ),
+                                                value: 'Available For Adoption',
+                                              ),
+                                              DropdownMenuItem(
+                                                child: Text(
+                                                  'Not Available For Adoption',
+                                                ),
+                                                value:
+                                                    'Not Available For Adoption',
+                                              ),
+                                              DropdownMenuItem(
+                                                child: Text(
+                                                  'Both',
+                                                ),
+                                                value: 'Both',
+                                              ),
+                                            ],
+                                            value: include,
+                                            dropdownColor: Colors.white,
+                                            icon: Icon(Feather.send),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                include = value;
+                                              });
+                                            }),
+                                        Expanded(
+                                          child: ListView.builder(
+                                            itemCount: types.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                leading: SizedBox(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: Checkbox(
+                                                    onChanged: (bool value) {},
+                                                    value: true,
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                    types.elementAt(index)),
+                                                contentPadding: EdgeInsets.only(
+                                                    left: 0,
+                                                    bottom: 0,
+                                                    right: 0,
+                                                    top: 0),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        // Container(
+                                        //   child: GridView.count(crossAxisCount: 6,children: [
+                                        //     for(int i = 0;i<6;i++)
+                                        //
+                                        //   ],),
+                                        // )
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('I Got it'),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Dismiss alert dialog
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(AntDesign.filter),
+                      label: Text('Filter'),
+                      elevation: 0.0,
+                      color: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    ),
+                  ],
+                ),
+              )
             ] +
             List.generate(pets.length, (index) {
               return Container(
@@ -91,12 +200,18 @@ class PetsScreen extends StatelessWidget {
                                               child: Text('Update')),
                                           PopupMenuItem(
                                               value: 'delete ${pets[index].id}',
-                                              child: Text('Delete'))
+                                              child: Text('Delete')),
+                                          PopupMenuItem(
+                                              value: 'share ${pets[index].id}',
+                                              child: Text('Share'))
                                         ]
                                       : [
-                                          new PopupMenuItem(
+                                          PopupMenuItem(
                                               value: 'report ${pets[index].id}',
-                                              child: Text('Report'))
+                                              child: Text('Report')),
+                                          PopupMenuItem(
+                                              value: 'share ${pets[index].id}',
+                                              child: Text('Share'))
                                         ]);
                                 },
                               ))),
@@ -166,7 +281,9 @@ class PetsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              pets[index].status
+                              pets[index].status && pets[index].ownerId != "1"
+                                  //ToDo: remove Comment
+                                  //sessionManager.user.id
                                   ? RaisedButton.icon(
                                       elevation: 0.0,
                                       color: Colors.white,
