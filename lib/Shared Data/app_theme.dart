@@ -8,7 +8,28 @@ class AppTheme extends ChangeNotifier {
     this.isDark = isDark;
     themeData = isDark ? darkTheme : lightTheme;
   }
+  getTextTheme(context) {
+    return MediaQuery.of(context).size.height / 30;
+  }
 
+  getSemiBodyTextTheme(context) {
+    return MediaQuery.of(context).size.height / 50;
+  }
+
+  getBodyTextTheme(context) {
+    return MediaQuery.of(context).size.height / 60;
+  }
+
+  getTextStyle(height, color, fontSize, fontWeight, decoration, [shadow]) {
+    return TextStyle(
+        height: height,
+        color: color,
+        fontFamily: 'Cairo',
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        decoration: decoration,
+        shadows: shadow);
+  }
   changeTheme(bool value) {
     themeData = value ? darkTheme : lightTheme;
     this.isDark = value;
