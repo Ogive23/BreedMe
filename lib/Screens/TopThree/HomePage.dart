@@ -14,8 +14,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../drawer_screen.dart';
+
+class BackgroundScreen extends StatefulWidget {
+  @override
+  _BackgroundScreenState createState() => _BackgroundScreenState();
+}
+
+class _BackgroundScreenState extends State<BackgroundScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [DrawerScreen(), HomeScreen()],
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   // int _index = 2;
+  double xOffset = 0;
+  double yOffset = 0;
+  double scaleFactor = 1;
+  double w, h;
+  bool scaled = false;
   CommonData commonData;
   AppLanguage appLanguage;
   AppTheme appTheme;
@@ -60,66 +86,97 @@ class HomeScreen extends StatelessWidget {
     commonData = Provider.of<CommonData>(context);
     return WillPopScope(
         onWillPop: () => _onWillPop(context),
-        child: Scaffold(
-            key: scaffoldKey,
-            backgroundColor: Colors.white.withOpacity(1.0),
-            drawer:commonData.step > 4
-                ? SizedBox()
-                : CustomDrawer(),
-            floatingActionButton:
-            commonData.step == 0 || commonData.step == 1 || commonData.step == 2
-                ? FloatingActionButton(
-              onPressed: () {
-                switch (commonData.step) {
-                  case 0:
-                    Navigator.pushNamed(context, "PlaceRequest");
-                    break;
-                  case 1:
-                    Navigator.pushNamed(context, "ConsultationCreation");
-                    break;
-                  case 2:
-                    Navigator.pushNamed(context, "PetCreation");
-                    break;
-                  default:
-                    break;
-                }
-              },
-              backgroundColor: Colors.white,
-              child: Icon(
-                pageFloatingPointIcons[commonData.step],
-                color: Colors.black,
-              ),
-              mini: true,
-            )
-                : SizedBox(),
-            body: pageOptions[commonData.step],
-            bottomNavigationBar: new Theme(
-              data: Theme.of(context).copyWith(
-                canvasColor: Colors.white,
-              ),
-              child: commonData.step > 4
-                  ? SizedBox()
-                  : BottomNavigationBar(
-                  selectedItemColor: Colors.amber,
-                  unselectedItemColor: Colors.black.withOpacity(0.5),
-                  onTap: (value) => commonData.changeStep(value),
-                  currentIndex: commonData.step,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          transform: Matrix4.translationValues(xOffset, yOffset, 0)
+            ..scale(scaleFactor),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+          child: Scaffold(
+                key: scaffoldKey,
+                appBar: AppBar(
+                  leading: IconButton(
+                    icon: Icon(Icons.menu,color: appTheme.themeData.iconTheme.color,),
+                    onPressed: () {
+                      setState(() {
+                        if (scaled) {
+                          xOffset = w / 2;
+                          yOffset = h / 5;
+                          scaleFactor = 0.6;
+                        } else {
+                          xOffset = 0;
+                          yOffset = 0;
+                          scaleFactor = 1;
+                        }
+                        scaled = !scaled;
+                      });
+                    },
+                  ),
+                  title: Text('${pageTitles[commonData.step]}',style: appTheme.themeData.textTheme.body1,),
+                  actions: [CircleAvatar(backgroundImage: NetworkImage(sessionManager.user.image,))],
+                  backgroundColor: appTheme.themeData.backgroundColor,
                   elevation: 0.0,
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.location_on),
-                      label: 'Places',
-                    ),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.contact_support),
-                        label: 'Consultations'),
-                    BottomNavigationBarItem(
-                        icon: Icon(FontAwesome5Solid.dog), label: 'Pets'),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.request_page), label: 'Requests'),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.article), label: 'Articles'),
-                  ]),
-            )));
+                ),
+                backgroundColor: Colors.white,
+                // drawer: commonData.step > 4 ? SizedBox() : CustomDrawer(),
+                floatingActionButton: commonData.step == 0 ||
+                        commonData.step == 1 ||
+                        commonData.step == 2
+                    ? FloatingActionButton(
+                        onPressed: () {
+                          switch (commonData.step) {
+                            case 0:
+                              Navigator.pushNamed(context, "PlaceRequest");
+                              break;
+                            case 1:
+                              Navigator.pushNamed(
+                                  context, "ConsultationCreation");
+                              break;
+                            case 2:
+                              Navigator.pushNamed(context, "PetCreation");
+                              break;
+                            default:
+                              break;
+                          }
+                        },
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          pageFloatingPointIcons[commonData.step],
+                          color: Colors.black,
+                        ),
+                        mini: true,
+                      )
+                    : SizedBox(),
+                body: pageOptions[commonData.step],
+                bottomNavigationBar: new Theme(
+                  data: Theme.of(context).copyWith(
+                    canvasColor: Colors.white,
+                  ),
+                  child: commonData.step > 4
+                      ? SizedBox()
+                      : BottomNavigationBar(
+                          selectedItemColor: Colors.amber,
+                          unselectedItemColor: Colors.black.withOpacity(0.5),
+                          onTap: (value) => commonData.changeStep(value),
+                          currentIndex: commonData.step,
+                          elevation: 0.0,
+                          items: [
+                              BottomNavigationBarItem(
+                                icon: Icon(Icons.location_on),
+                                label: 'Places',
+                              ),
+                              BottomNavigationBarItem(
+                                  icon: Icon(Icons.contact_support),
+                                  label: 'Consultations'),
+                              BottomNavigationBarItem(
+                                  icon: Icon(FontAwesome5Solid.dog),
+                                  label: 'Pets'),
+                              BottomNavigationBarItem(
+                                  icon: Icon(Icons.request_page),
+                                  label: 'Requests'),
+                              BottomNavigationBarItem(
+                                  icon: Icon(Icons.article), label: 'Articles'),
+                            ]),
+                )),
+        ));
   }
 }
