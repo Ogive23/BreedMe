@@ -1,12 +1,5 @@
-import 'package:breed_me/Custom%20Widgets/custom_drawer.dart';
-import 'package:breed_me/Screens/ArticlesScreens/articles_screen.dart';
-import 'package:breed_me/Screens/ConsultationScreens/consultations_screen.dart';
-import 'package:breed_me/Screens/PetScreens/pets_screen.dart';
-import 'package:breed_me/Screens/PlacesScreens/places_screen.dart';
-import 'package:breed_me/Screens/RequestScreens/requests_screen.dart';
-import 'package:breed_me/Screens/SideScreens/profile_screen.dart';
-import 'package:breed_me/Screens/SideScreens/settings_screen.dart';
-import 'package:breed_me/Screens/SideScreens/stay_in_touch_screen.dart';
+
+import 'package:breed_me/Session/session_manager.dart';
 import 'package:breed_me/Shared%20Data/app_language.dart';
 import 'package:breed_me/Shared%20Data/app_theme.dart';
 import 'package:breed_me/Shared%20Data/common_data.dart';
@@ -14,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../../GeneralInfo.dart';
 import '../drawer_screen.dart';
 
 class BackgroundScreen extends StatefulWidget {
@@ -46,44 +40,53 @@ class _HomeScreenState extends State<HomeScreen> {
   AppLanguage appLanguage;
   AppTheme appTheme;
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  SessionManager sessionManager = new SessionManager();
   TabController tabController;
-  final pageOptions = [
-    PlacesScreen(),
-    ConsultationsScreen(),
-    PetsScreen(),
-    RequestsScreen(),
-    ArticlesScreen(),
-    SettingsScreen(),
-    ProfileScreen(),
-    StayInTouchScreen(),
+
+  final pageTitles = [
+    'Places',
+    'Consultations',
+    'Pets',
+    'Requests',
+    'Articles',
+    'Settings',
+    'Profile',
+    'StayInTouch'
   ];
   final pageFloatingPointIcons = [
     Icons.add_location_alt,
     Icons.post_add,
     Icons.add,
   ];
+
   Future<bool> _onWillPop(context) async {
-    return commonData.lastStep()?(await showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('No'),
-          ),
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: new Text('Yes'),
-          ),
-        ],
-      ),
-    )):commonData.back();
+    return commonData.lastStep()
+        ? (await showDialog(
+            context: context,
+            builder: (context) => new AlertDialog(
+              title: new Text('Are you sure?'),
+              content: new Text('Do you want to exit an App'),
+              actions: <Widget>[
+                new FlatButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: new Text('No'),
+                ),
+                new FlatButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: new Text('Yes'),
+                ),
+              ],
+            ),
+          ))
+        : commonData.back();
   }
+
   @override
   Widget build(BuildContext context) {
     commonData = Provider.of<CommonData>(context);
+    appTheme = Provider.of<AppTheme>(context);
+    w = MediaQuery.of(context).size.width;
+    h = MediaQuery.of(context).size.height;
     return WillPopScope(
         onWillPop: () => _onWillPop(context),
         child: AnimatedContainer(
@@ -117,35 +120,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   elevation: 0.0,
                 ),
                 backgroundColor: Colors.white,
-                // drawer: commonData.step > 4 ? SizedBox() : CustomDrawer(),
-                floatingActionButton: commonData.step == 0 ||
-                        commonData.step == 1 ||
-                        commonData.step == 2
-                    ? FloatingActionButton(
-                        onPressed: () {
-                          switch (commonData.step) {
-                            case 0:
-                              Navigator.pushNamed(context, "PlaceRequest");
-                              break;
-                            case 1:
-                              Navigator.pushNamed(
-                                  context, "ConsultationCreation");
-                              break;
-                            case 2:
-                              Navigator.pushNamed(context, "PetCreation");
-                              break;
-                            default:
-                              break;
-                          }
-                        },
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          pageFloatingPointIcons[commonData.step],
-                          color: Colors.black,
-                        ),
-                        mini: true,
-                      )
-                    : SizedBox(),
+                // floatingActionButton: commonData.step == Pages.PlacesScreen.index ||
+                //         commonData.step == Pages.Consultations.index ||
+                //         commonData.step == Pages.PetsScreen.index
+                //     ? FloatingActionButton(
+                //         onPressed: () {
+                //           switch (commonData.step) {
+                //             case Pages.PlacesScreen.index:
+                //               Navigator.pushNamed(context, "PlaceRequest");
+                //               break;
+                //             case Pages.Consultations.index:
+                //               Navigator.pushNamed(
+                //                   context, "ConsultationCreation");
+                //               break;
+                //             case Pages.PetsScreen.index:
+                //               Navigator.pushNamed(context, "PetCreation");
+                //               break;
+                //             default:
+                //               break;
+                //           }
+                //         },
+                //         backgroundColor: Colors.white,
+                //         child: Icon(
+                //           pageFloatingPointIcons[commonData.step],
+                //           color: Colors.black,
+                //         ),
+                //         mini: true,
+                //       )
+                //     : SizedBox(),
                 body: pageOptions[commonData.step],
                 bottomNavigationBar: new Theme(
                   data: Theme.of(context).copyWith(
