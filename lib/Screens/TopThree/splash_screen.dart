@@ -49,10 +49,11 @@ class _SplashScreen extends State<SplashScreen>
   }
 
   getHomePage() {
-    if (sessionManager.notFirstTime())
+    if (sessionManager.notFirstTime() && sessionManager.isLoggedIn())
       return 'MainScreen';
-    else
-      return 'WelcomeScreen';
+    else if(sessionManager.notFirstTime() && !sessionManager.isLoggedIn())
+      return 'LoginScreen';
+    return 'WelcomeScreen';
   }
 
   @override

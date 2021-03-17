@@ -25,6 +25,10 @@ class SessionManager {
     sharedPreferences.setString('notFirstTime', true.toString());
   }
 
+  bool isLoggedIn(){
+    return sharedPreferences.containsKey('user');
+  }
+
   createPreferredTheme(bool theme) {
     sharedPreferences.setString('theme', theme.toString());
   }
