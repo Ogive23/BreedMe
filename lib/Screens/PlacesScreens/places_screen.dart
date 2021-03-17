@@ -139,23 +139,12 @@ class PlacesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     appTheme = Provider.of<AppTheme>(context);
-    return CustomScrollView(
-        // Add the app bar and list of items as slivers in the next steps.
-        slivers: <Widget>[
-          SliverAppBar(
-            // pinned: true,
-            floating: true,
-            backgroundColor: Colors.white,
-            elevation: 1.0,
-            forceElevated: true,
-            iconTheme: IconThemeData(color: Colors.black),
-            title: Text(
-              'Places',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate.fixed([
+    return Container(
+      child: Column(
+        children: [
+          Container(),
+          Expanded(child: SingleChildScrollView(
+            child: Column(children: [
               Container(
                 color: Colors.deepOrange,
               ),
@@ -238,9 +227,11 @@ class PlacesScreen extends StatelessWidget {
                   ],
                 ),
               )
-            ]),
-          )
-        ]);
+            ],),
+          ))
+        ],
+      ),
+    );
   }
 
   getStars(int i, context) {
