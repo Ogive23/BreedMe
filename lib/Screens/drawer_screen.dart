@@ -1,3 +1,4 @@
+import 'package:breed_me/GeneralInfo.dart';
 import 'package:breed_me/Screens/SideScreens/settings_screen.dart';
 import 'package:breed_me/Session/session_manager.dart';
 import 'package:breed_me/Shared%20Data/app_language.dart';
@@ -24,97 +25,131 @@ class _DrawerScreenState extends State<DrawerScreen> {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height / 10,
+          ),
       decoration: BoxDecoration(
-        color: appTheme.isDark? Colors.blue[700]: Colors.blue[100],
-          // image: DecorationImage(
-          //     image: AssetImage(appTheme.isDark
-          //         ? 'assets/images/istockphoto-1085096164-170667a.jpg'
-          //         : 'assets/images/istockphoto-684841716-1024x1024.jpg'),
-          //     fit: BoxFit.cover)
-        ),
+        color: appTheme.isDark ? Colors.blueGrey[700] : Colors.blueGrey[100],
+        // image: DecorationImage(
+        //     image: AssetImage(appTheme.isDark
+        //         ? 'assets/images/istockphoto-1085096164-170667a.jpg'
+        //         : 'assets/images/istockphoto-684841716-1024x1024.jpg'),
+        //     fit: BoxFit.cover)
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.transparent,
-            child: ClipOval(
-              child: Image.network(
-                sessionManager.user.image,
-                fit: BoxFit.fill,
-                width: 120,
-                height: 120,
+          Row(
+            children: [
+              SizedBox(width: MediaQuery.of(context).size.width / 50),
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.transparent,
+                child: ClipOval(
+                  child: Image.network(
+                    sessionManager.user.image,
+                    fit: BoxFit.fill,
+                    width: 120,
+                    height: 120,
+                  ),
+                ),
               ),
-            ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 50,
+              ),
+              Text(
+                'Mahmoued',
+                style: appTheme.themeData.textTheme.body1,
+              )
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 10,
           ),
           RaisedButton.icon(
             label: Text(
               'Home',
-              style: TextStyle(color: appTheme.themeData.accentColor),
+              style: commonData.step == Pages.PetsScreen.index
+                  ? appTheme.themeData.textTheme.body1
+                  : appTheme.themeData.textTheme.body2,
             ),
             icon: Icon(
               Icons.home,
               size: 30,
-              color: appTheme.themeData.accentColor,
+              color: commonData.step == Pages.PetsScreen.index
+                  ? appTheme.themeData.accentColor
+                  : appTheme.themeData.accentColor.withOpacity(0.5),
             ),
             color: Colors.transparent,
             splashColor: Colors.transparent,
             elevation: 0.0,
             onPressed: () {
-              commonData.changeStep(2);
+              commonData.changeStep(Pages.PetsScreen.index);
             },
           ),
           RaisedButton.icon(
             label: Text(
               'Profile',
-              style: TextStyle(color: appTheme.themeData.accentColor),
+              style: commonData.step == Pages.ProfileScreen.index
+                  ? appTheme.themeData.textTheme.body1
+                  : appTheme.themeData.textTheme.body2,
             ),
             icon: Icon(
-              Icons.accessibility,
+              Icons.account_circle,
               size: 30,
-              color: appTheme.themeData.accentColor,
+              color: commonData.step == Pages.ProfileScreen.index
+                  ? appTheme.themeData.accentColor
+                  : appTheme.themeData.accentColor.withOpacity(0.5),
             ),
             color: Colors.transparent,
             splashColor: Colors.transparent,
             elevation: 0.0,
             onPressed: () {
-              commonData.changeStep(6);
+              commonData.changeStep(Pages.ProfileScreen.index);
             },
           ),
           RaisedButton.icon(
             label: Text(
               'Settings',
-              style: TextStyle(color: appTheme.themeData.accentColor),
+              style: commonData.step == Pages.SettingsScreen.index
+                  ? appTheme.themeData.textTheme.body1
+                  : appTheme.themeData.textTheme.body2,
             ),
             icon: Icon(
               Icons.settings,
               size: 30,
-              color: appTheme.themeData.accentColor,
+              color: commonData.step == Pages.SettingsScreen.index
+                  ? appTheme.themeData.accentColor
+                  : appTheme.themeData.accentColor.withOpacity(0.5),
             ),
             color: Colors.transparent,
             splashColor: Colors.transparent,
             elevation: 0.0,
             onPressed: () {
               // Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen(),));
-              commonData.changeStep(5);
+              commonData.changeStep(Pages.SettingsScreen.index);
             },
           ),
           RaisedButton.icon(
             label: Text(
               'Stay In Touch',
-              style: TextStyle(color: appTheme.themeData.accentColor),
+              style: commonData.step == Pages.StayInTouchScreen.index
+                  ? appTheme.themeData.textTheme.body1
+                  : appTheme.themeData.textTheme.body2,
             ),
             icon: Icon(
               Icons.wifi_protected_setup,
               size: 30,
-              color: appTheme.themeData.accentColor,
+              color: commonData.step == Pages.StayInTouchScreen.index
+                  ? appTheme.themeData.accentColor
+                  : appTheme.themeData.accentColor.withOpacity(0.5),
             ),
             color: Colors.transparent,
             splashColor: Colors.transparent,
             elevation: 0.0,
             onPressed: () {
-              commonData.changeStep(7);
+              commonData.changeStep(Pages.StayInTouchScreen.index);
             },
           ),
           RaisedButton.icon(
@@ -125,7 +160,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               Navigator.popAndPushNamed(context, "Login");
             },
             icon: Icon(
-              Icons.exit_to_app,
+              Icons.logout,
               size: 30,
               color: appTheme.themeData.accentColor,
             ),
@@ -150,7 +185,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   style: TextStyle(color: Colors.red, fontSize: 15))),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width/8),
+              margin:
+                  EdgeInsets.only(left: MediaQuery.of(context).size.width / 8),
               child: Image.asset(
                 'assets/images/ogive_version_2.png',
                 width: 100,
