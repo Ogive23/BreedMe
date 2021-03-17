@@ -64,8 +64,8 @@ class AppTheme extends ChangeNotifier {
             fontSize: 16.0,
           ),
           body2: TextStyle(
-            color: Colors.black,
-            fontSize: 14.0,
+            color: Colors.black.withOpacity(0.5),
+            fontSize: 16.0,
           )),
       toggleableActiveColor: Colors.green,buttonColor: Colors.white);
 
@@ -99,7 +99,7 @@ class AppTheme extends ChangeNotifier {
             fontSize: 16.0,
           ),
           body2: TextStyle(
-            color: Colors.white,
+            color: Colors.white.withOpacity(0.5),
             fontSize: 16.0,
           )),
       toggleableActiveColor: Colors.green,
