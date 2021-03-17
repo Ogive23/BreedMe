@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         "SplashScreen": (BuildContext context) => SplashScreen(),
         "MainScreen": (BuildContext context) => MainScreen(),
         "WelcomeScreen": (BuildContext context) => WelcomeScreen(),
-        "Login": (BuildContext context) => LoginScreen(),
+        "LoginScreen": (BuildContext context) => LoginScreen(),
         "SignUp": (BuildContext context) => SignUpScreen(),
         "ConsultationCreation": (BuildContext context) =>
             ConsultationCreationScreen(),
@@ -67,7 +67,7 @@ class MainScreen extends StatelessWidget {
       ChangeNotifierProvider<CommonData>(
         create: (context) => commonData,
       )
-    ], child: HomeScreen());
+    ], child: BackgroundScreen());
   }
 }
 
